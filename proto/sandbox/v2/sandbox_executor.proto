@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sandbox.v2;
+
+option go_package = "github.com/Duke-ECE/protos/gen/go/sandbox/v2;v2";
+
+// SandboxExecutorService is the runtime's only entry point: submit a tool
+// call, get the result synchronously. The sandbox lifecycle (pooling,
+// creation, destruction) is entirely managed by the server; sandboxes are
+// anonymous, stateless and single-use.
+service SandboxExecutorService {
+  rpc Execute(ExecuteRequest) returns (ExecuteResponse);
+}
+
+message ExecuteRequest {
+  string tool = 1;             // tool name, e.g. "shell", "python"
+  string input = 2;            // tool input (shell command, source code, ...)
+  int64 timeout_seconds = 3;   // optional, default 60, capped at 300
+}
+
+message ExecuteResponse {
+  int32 exit_code = 1;
+  string stdout = 2;           // truncated to the server's max output size
+  string stderr = 3;
+  bool truncated = 4;
+}
