@@ -24,7 +24,8 @@ const (
 type CreateSessionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Llm           *LlmConfig             `protobuf:"bytes,2,opt,name=llm,proto3" json:"llm,omitempty"` // optional; server falls back to env config if absent
+	Llm           *LlmConfig             `protobuf:"bytes,2,opt,name=llm,proto3" json:"llm,omitempty"`                              // optional; server falls back to env config if absent
+	SessionId     string                 `protobuf:"bytes,3,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"` // optional; when set (by the session-manager), the
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -71,6 +72,13 @@ func (x *CreateSessionRequest) GetLlm() *LlmConfig {
 		return x.Llm
 	}
 	return nil
+}
+
+func (x *CreateSessionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 // LlmConfig points at any OpenAI-compatible endpoint.
@@ -895,10 +903,12 @@ var File_runtime_v1_agent_proto protoreflect.FileDescriptor
 const file_runtime_v1_agent_proto_rawDesc = "" +
 	"\n" +
 	"\x16runtime/v1/agent.proto\x12\n" +
-	"runtime.v1\"X\n" +
+	"runtime.v1\"w\n" +
 	"\x14CreateSessionRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12'\n" +
-	"\x03llm\x18\x02 \x01(\v2\x15.runtime.v1.LlmConfigR\x03llm\"U\n" +
+	"\x03llm\x18\x02 \x01(\v2\x15.runtime.v1.LlmConfigR\x03llm\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x03 \x01(\tR\tsessionId\"U\n" +
 	"\tLlmConfig\x12\x17\n" +
 	"\aapi_key\x18\x01 \x01(\tR\x06apiKey\x12\x19\n" +
 	"\bbase_url\x18\x02 \x01(\tR\abaseUrl\x12\x14\n" +
