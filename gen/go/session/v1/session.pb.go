@@ -25,6 +25,7 @@ type CreateSessionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`       // required; becomes the session owner
 	LlmModel      string                 `protobuf:"bytes,2,opt,name=llm_model,json=llmModel,proto3" json:"llm_model,omitempty"` // informational, for display in the console
+	AgentId       string                 `protobuf:"bytes,3,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`    // optional; the agent template this session runs
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -69,6 +70,13 @@ func (x *CreateSessionRequest) GetUserId() string {
 func (x *CreateSessionRequest) GetLlmModel() string {
 	if x != nil {
 		return x.LlmModel
+	}
+	return ""
+}
+
+func (x *CreateSessionRequest) GetAgentId() string {
+	if x != nil {
+		return x.AgentId
 	}
 	return ""
 }
@@ -696,6 +704,7 @@ type Session struct {
 	LastActive    string                 `protobuf:"bytes,6,opt,name=last_active,json=lastActive,proto3" json:"last_active,omitempty"` // RFC 3339
 	EndedAt       string                 `protobuf:"bytes,7,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty"`          // RFC 3339, empty unless ended
 	Title         string                 `protobuf:"bytes,8,opt,name=title,proto3" json:"title,omitempty"`                             // optional display title
+	AgentId       string                 `protobuf:"bytes,9,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`          // optional; the agent template this session runs
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -786,6 +795,13 @@ func (x *Session) GetTitle() string {
 	return ""
 }
 
+func (x *Session) GetAgentId() string {
+	if x != nil {
+		return x.AgentId
+	}
+	return ""
+}
+
 type TurnMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Seq           int32                  `protobuf:"varint,1,opt,name=seq,proto3" json:"seq,omitempty"`
@@ -859,10 +875,11 @@ var File_session_v1_session_proto protoreflect.FileDescriptor
 const file_session_v1_session_proto_rawDesc = "" +
 	"\n" +
 	"\x18session/v1/session.proto\x12\n" +
-	"session.v1\"L\n" +
+	"session.v1\"g\n" +
 	"\x14CreateSessionRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tllm_model\x18\x02 \x01(\tR\bllmModel\"F\n" +
+	"\tllm_model\x18\x02 \x01(\tR\bllmModel\x12\x19\n" +
+	"\bagent_id\x18\x03 \x01(\tR\aagentId\"F\n" +
 	"\x15CreateSessionResponse\x12-\n" +
 	"\asession\x18\x01 \x01(\v2\x13.session.v1.SessionR\asession\"K\n" +
 	"\x11GetSessionRequest\x12\x1d\n" +
@@ -897,7 +914,7 @@ const file_session_v1_session_proto_rawDesc = "" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\"A\n" +
 	"\x10SetTitleResponse\x12-\n" +
-	"\asession\x18\x01 \x01(\v2\x13.session.v1.SessionR\asession\"\xd8\x01\n" +
+	"\asession\x18\x01 \x01(\v2\x13.session.v1.SessionR\asession\"\xf3\x01\n" +
 	"\aSession\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x16\n" +
@@ -908,7 +925,8 @@ const file_session_v1_session_proto_rawDesc = "" +
 	"\vlast_active\x18\x06 \x01(\tR\n" +
 	"lastActive\x12\x19\n" +
 	"\bended_at\x18\a \x01(\tR\aendedAt\x12\x14\n" +
-	"\x05title\x18\b \x01(\tR\x05title\"u\n" +
+	"\x05title\x18\b \x01(\tR\x05title\x12\x19\n" +
+	"\bagent_id\x18\t \x01(\tR\aagentId\"u\n" +
 	"\vTurnMessage\x12\x10\n" +
 	"\x03seq\x18\x01 \x01(\x05R\x03seq\x12\x12\n" +
 	"\x04role\x18\x02 \x01(\tR\x04role\x12!\n" +
