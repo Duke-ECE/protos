@@ -27,8 +27,10 @@ type CreateSessionRequest struct {
 	Llm       *LlmConfig             `protobuf:"bytes,2,opt,name=llm,proto3" json:"llm,omitempty"`                              // optional; server falls back to env config if absent
 	SessionId string                 `protobuf:"bytes,3,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"` // optional; when set (by the session-manager), the
 	// server adopts it instead of generating one
-	SystemPrompt  string   `protobuf:"bytes,4,opt,name=system_prompt,json=systemPrompt,proto3" json:"system_prompt,omitempty"` // optional; empty = server built-in default
-	Tools         []string `protobuf:"bytes,5,rep,name=tools,proto3" json:"tools,omitempty"`                                   // optional; empty = all built-in tools
+	SystemPrompt string `protobuf:"bytes,4,opt,name=system_prompt,json=systemPrompt,proto3" json:"system_prompt,omitempty"` // optional; empty = no system prompt (the
+	// platform's default lives in the template
+	// store, not in this server)
+	Tools         []string `protobuf:"bytes,5,rep,name=tools,proto3" json:"tools,omitempty"` // optional; empty = all built-in tools
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
