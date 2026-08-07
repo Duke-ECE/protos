@@ -586,6 +586,106 @@ func (x *GetTranscriptResponse) GetMessages() []*TurnMessage {
 	return nil
 }
 
+// SetTitle sets the session's display title (e.g. an LLM-generated summary
+// of the first turn). Runtime-internal: service token required; setting a
+// title on an ended session is allowed (titles are editable metadata, not
+// transcript content).
+type SetTitleRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"` // empty title is rejected
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetTitleRequest) Reset() {
+	*x = SetTitleRequest{}
+	mi := &file_session_v1_session_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetTitleRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetTitleRequest) ProtoMessage() {}
+
+func (x *SetTitleRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_session_v1_session_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetTitleRequest.ProtoReflect.Descriptor instead.
+func (*SetTitleRequest) Descriptor() ([]byte, []int) {
+	return file_session_v1_session_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *SetTitleRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+func (x *SetTitleRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+type SetTitleResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Session       *Session               `protobuf:"bytes,1,opt,name=session,proto3" json:"session,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetTitleResponse) Reset() {
+	*x = SetTitleResponse{}
+	mi := &file_session_v1_session_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetTitleResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetTitleResponse) ProtoMessage() {}
+
+func (x *SetTitleResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_session_v1_session_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetTitleResponse.ProtoReflect.Descriptor instead.
+func (*SetTitleResponse) Descriptor() ([]byte, []int) {
+	return file_session_v1_session_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *SetTitleResponse) GetSession() *Session {
+	if x != nil {
+		return x.Session
+	}
+	return nil
+}
+
 type Session struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -595,13 +695,14 @@ type Session struct {
 	CreatedAt     string                 `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`    // RFC 3339
 	LastActive    string                 `protobuf:"bytes,6,opt,name=last_active,json=lastActive,proto3" json:"last_active,omitempty"` // RFC 3339
 	EndedAt       string                 `protobuf:"bytes,7,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty"`          // RFC 3339, empty unless ended
+	Title         string                 `protobuf:"bytes,8,opt,name=title,proto3" json:"title,omitempty"`                             // optional display title
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Session) Reset() {
 	*x = Session{}
-	mi := &file_session_v1_session_proto_msgTypes[12]
+	mi := &file_session_v1_session_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -613,7 +714,7 @@ func (x *Session) String() string {
 func (*Session) ProtoMessage() {}
 
 func (x *Session) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[12]
+	mi := &file_session_v1_session_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -626,7 +727,7 @@ func (x *Session) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Session.ProtoReflect.Descriptor instead.
 func (*Session) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{12}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Session) GetId() string {
@@ -678,6 +779,13 @@ func (x *Session) GetEndedAt() string {
 	return ""
 }
 
+func (x *Session) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
 type TurnMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Seq           int32                  `protobuf:"varint,1,opt,name=seq,proto3" json:"seq,omitempty"`
@@ -690,7 +798,7 @@ type TurnMessage struct {
 
 func (x *TurnMessage) Reset() {
 	*x = TurnMessage{}
-	mi := &file_session_v1_session_proto_msgTypes[13]
+	mi := &file_session_v1_session_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -702,7 +810,7 @@ func (x *TurnMessage) String() string {
 func (*TurnMessage) ProtoMessage() {}
 
 func (x *TurnMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[13]
+	mi := &file_session_v1_session_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -715,7 +823,7 @@ func (x *TurnMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TurnMessage.ProtoReflect.Descriptor instead.
 func (*TurnMessage) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{13}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *TurnMessage) GetSeq() int32 {
@@ -783,7 +891,13 @@ const file_session_v1_session_proto_rawDesc = "" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\"L\n" +
 	"\x15GetTranscriptResponse\x123\n" +
-	"\bmessages\x18\x01 \x03(\v2\x17.session.v1.TurnMessageR\bmessages\"\xc2\x01\n" +
+	"\bmessages\x18\x01 \x03(\v2\x17.session.v1.TurnMessageR\bmessages\"F\n" +
+	"\x0fSetTitleRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\"A\n" +
+	"\x10SetTitleResponse\x12-\n" +
+	"\asession\x18\x01 \x01(\v2\x13.session.v1.SessionR\asession\"\xd8\x01\n" +
 	"\aSession\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x16\n" +
@@ -793,13 +907,14 @@ const file_session_v1_session_proto_rawDesc = "" +
 	"created_at\x18\x05 \x01(\tR\tcreatedAt\x12\x1f\n" +
 	"\vlast_active\x18\x06 \x01(\tR\n" +
 	"lastActive\x12\x19\n" +
-	"\bended_at\x18\a \x01(\tR\aendedAt\"u\n" +
+	"\bended_at\x18\a \x01(\tR\aendedAt\x12\x14\n" +
+	"\x05title\x18\b \x01(\tR\x05title\"u\n" +
 	"\vTurnMessage\x12\x10\n" +
 	"\x03seq\x18\x01 \x01(\x05R\x03seq\x12\x12\n" +
 	"\x04role\x18\x02 \x01(\tR\x04role\x12!\n" +
 	"\fcontent_json\x18\x03 \x01(\tR\vcontentJson\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\x04 \x01(\tR\tcreatedAt2\xf6\x03\n" +
+	"created_at\x18\x04 \x01(\tR\tcreatedAt2\xbd\x04\n" +
 	"\x0eSessionService\x12T\n" +
 	"\rCreateSession\x12 .session.v1.CreateSessionRequest\x1a!.session.v1.CreateSessionResponse\x12K\n" +
 	"\n" +
@@ -809,7 +924,8 @@ const file_session_v1_session_proto_rawDesc = "" +
 	"EndSession\x12\x1d.session.v1.EndSessionRequest\x1a\x1e.session.v1.EndSessionResponse\x12K\n" +
 	"\n" +
 	"AppendTurn\x12\x1d.session.v1.AppendTurnRequest\x1a\x1e.session.v1.AppendTurnResponse\x12T\n" +
-	"\rGetTranscript\x12 .session.v1.GetTranscriptRequest\x1a!.session.v1.GetTranscriptResponseB1Z/github.com/Duke-ECE/protos/gen/go/session/v1;v1b\x06proto3"
+	"\rGetTranscript\x12 .session.v1.GetTranscriptRequest\x1a!.session.v1.GetTranscriptResponse\x12E\n" +
+	"\bSetTitle\x12\x1b.session.v1.SetTitleRequest\x1a\x1c.session.v1.SetTitleResponseB1Z/github.com/Duke-ECE/protos/gen/go/session/v1;v1b\x06proto3"
 
 var (
 	file_session_v1_session_proto_rawDescOnce sync.Once
@@ -823,7 +939,7 @@ func file_session_v1_session_proto_rawDescGZIP() []byte {
 	return file_session_v1_session_proto_rawDescData
 }
 
-var file_session_v1_session_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_session_v1_session_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_session_v1_session_proto_goTypes = []any{
 	(*CreateSessionRequest)(nil),  // 0: session.v1.CreateSessionRequest
 	(*CreateSessionResponse)(nil), // 1: session.v1.CreateSessionResponse
@@ -837,32 +953,37 @@ var file_session_v1_session_proto_goTypes = []any{
 	(*AppendTurnResponse)(nil),    // 9: session.v1.AppendTurnResponse
 	(*GetTranscriptRequest)(nil),  // 10: session.v1.GetTranscriptRequest
 	(*GetTranscriptResponse)(nil), // 11: session.v1.GetTranscriptResponse
-	(*Session)(nil),               // 12: session.v1.Session
-	(*TurnMessage)(nil),           // 13: session.v1.TurnMessage
+	(*SetTitleRequest)(nil),       // 12: session.v1.SetTitleRequest
+	(*SetTitleResponse)(nil),      // 13: session.v1.SetTitleResponse
+	(*Session)(nil),               // 14: session.v1.Session
+	(*TurnMessage)(nil),           // 15: session.v1.TurnMessage
 }
 var file_session_v1_session_proto_depIdxs = []int32{
-	12, // 0: session.v1.CreateSessionResponse.session:type_name -> session.v1.Session
-	12, // 1: session.v1.GetSessionResponse.session:type_name -> session.v1.Session
-	12, // 2: session.v1.ListSessionsResponse.sessions:type_name -> session.v1.Session
-	13, // 3: session.v1.AppendTurnRequest.messages:type_name -> session.v1.TurnMessage
-	13, // 4: session.v1.GetTranscriptResponse.messages:type_name -> session.v1.TurnMessage
-	0,  // 5: session.v1.SessionService.CreateSession:input_type -> session.v1.CreateSessionRequest
-	2,  // 6: session.v1.SessionService.GetSession:input_type -> session.v1.GetSessionRequest
-	4,  // 7: session.v1.SessionService.ListSessions:input_type -> session.v1.ListSessionsRequest
-	6,  // 8: session.v1.SessionService.EndSession:input_type -> session.v1.EndSessionRequest
-	8,  // 9: session.v1.SessionService.AppendTurn:input_type -> session.v1.AppendTurnRequest
-	10, // 10: session.v1.SessionService.GetTranscript:input_type -> session.v1.GetTranscriptRequest
-	1,  // 11: session.v1.SessionService.CreateSession:output_type -> session.v1.CreateSessionResponse
-	3,  // 12: session.v1.SessionService.GetSession:output_type -> session.v1.GetSessionResponse
-	5,  // 13: session.v1.SessionService.ListSessions:output_type -> session.v1.ListSessionsResponse
-	7,  // 14: session.v1.SessionService.EndSession:output_type -> session.v1.EndSessionResponse
-	9,  // 15: session.v1.SessionService.AppendTurn:output_type -> session.v1.AppendTurnResponse
-	11, // 16: session.v1.SessionService.GetTranscript:output_type -> session.v1.GetTranscriptResponse
-	11, // [11:17] is the sub-list for method output_type
-	5,  // [5:11] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	14, // 0: session.v1.CreateSessionResponse.session:type_name -> session.v1.Session
+	14, // 1: session.v1.GetSessionResponse.session:type_name -> session.v1.Session
+	14, // 2: session.v1.ListSessionsResponse.sessions:type_name -> session.v1.Session
+	15, // 3: session.v1.AppendTurnRequest.messages:type_name -> session.v1.TurnMessage
+	15, // 4: session.v1.GetTranscriptResponse.messages:type_name -> session.v1.TurnMessage
+	14, // 5: session.v1.SetTitleResponse.session:type_name -> session.v1.Session
+	0,  // 6: session.v1.SessionService.CreateSession:input_type -> session.v1.CreateSessionRequest
+	2,  // 7: session.v1.SessionService.GetSession:input_type -> session.v1.GetSessionRequest
+	4,  // 8: session.v1.SessionService.ListSessions:input_type -> session.v1.ListSessionsRequest
+	6,  // 9: session.v1.SessionService.EndSession:input_type -> session.v1.EndSessionRequest
+	8,  // 10: session.v1.SessionService.AppendTurn:input_type -> session.v1.AppendTurnRequest
+	10, // 11: session.v1.SessionService.GetTranscript:input_type -> session.v1.GetTranscriptRequest
+	12, // 12: session.v1.SessionService.SetTitle:input_type -> session.v1.SetTitleRequest
+	1,  // 13: session.v1.SessionService.CreateSession:output_type -> session.v1.CreateSessionResponse
+	3,  // 14: session.v1.SessionService.GetSession:output_type -> session.v1.GetSessionResponse
+	5,  // 15: session.v1.SessionService.ListSessions:output_type -> session.v1.ListSessionsResponse
+	7,  // 16: session.v1.SessionService.EndSession:output_type -> session.v1.EndSessionResponse
+	9,  // 17: session.v1.SessionService.AppendTurn:output_type -> session.v1.AppendTurnResponse
+	11, // 18: session.v1.SessionService.GetTranscript:output_type -> session.v1.GetTranscriptResponse
+	13, // 19: session.v1.SessionService.SetTitle:output_type -> session.v1.SetTitleResponse
+	13, // [13:20] is the sub-list for method output_type
+	6,  // [6:13] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_session_v1_session_proto_init() }
@@ -876,7 +997,7 @@ func file_session_v1_session_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_session_v1_session_proto_rawDesc), len(file_session_v1_session_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

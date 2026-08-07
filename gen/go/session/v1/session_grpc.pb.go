@@ -25,6 +25,7 @@ const (
 	SessionService_EndSession_FullMethodName    = "/session.v1.SessionService/EndSession"
 	SessionService_AppendTurn_FullMethodName    = "/session.v1.SessionService/AppendTurn"
 	SessionService_GetTranscript_FullMethodName = "/session.v1.SessionService/GetTranscript"
+	SessionService_SetTitle_FullMethodName      = "/session.v1.SessionService/SetTitle"
 )
 
 // SessionServiceClient is the client API for SessionService service.
@@ -44,6 +45,7 @@ type SessionServiceClient interface {
 	EndSession(ctx context.Context, in *EndSessionRequest, opts ...grpc.CallOption) (*EndSessionResponse, error)
 	AppendTurn(ctx context.Context, in *AppendTurnRequest, opts ...grpc.CallOption) (*AppendTurnResponse, error)
 	GetTranscript(ctx context.Context, in *GetTranscriptRequest, opts ...grpc.CallOption) (*GetTranscriptResponse, error)
+	SetTitle(ctx context.Context, in *SetTitleRequest, opts ...grpc.CallOption) (*SetTitleResponse, error)
 }
 
 type sessionServiceClient struct {
@@ -114,6 +116,16 @@ func (c *sessionServiceClient) GetTranscript(ctx context.Context, in *GetTranscr
 	return out, nil
 }
 
+func (c *sessionServiceClient) SetTitle(ctx context.Context, in *SetTitleRequest, opts ...grpc.CallOption) (*SetTitleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetTitleResponse)
+	err := c.cc.Invoke(ctx, SessionService_SetTitle_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SessionServiceServer is the server API for SessionService service.
 // All implementations must embed UnimplementedSessionServiceServer
 // for forward compatibility.
@@ -131,6 +143,7 @@ type SessionServiceServer interface {
 	EndSession(context.Context, *EndSessionRequest) (*EndSessionResponse, error)
 	AppendTurn(context.Context, *AppendTurnRequest) (*AppendTurnResponse, error)
 	GetTranscript(context.Context, *GetTranscriptRequest) (*GetTranscriptResponse, error)
+	SetTitle(context.Context, *SetTitleRequest) (*SetTitleResponse, error)
 	mustEmbedUnimplementedSessionServiceServer()
 }
 
@@ -158,6 +171,9 @@ func (UnimplementedSessionServiceServer) AppendTurn(context.Context, *AppendTurn
 }
 func (UnimplementedSessionServiceServer) GetTranscript(context.Context, *GetTranscriptRequest) (*GetTranscriptResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetTranscript not implemented")
+}
+func (UnimplementedSessionServiceServer) SetTitle(context.Context, *SetTitleRequest) (*SetTitleResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetTitle not implemented")
 }
 func (UnimplementedSessionServiceServer) mustEmbedUnimplementedSessionServiceServer() {}
 func (UnimplementedSessionServiceServer) testEmbeddedByValue()                        {}
@@ -288,6 +304,24 @@ func _SessionService_GetTranscript_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SessionService_SetTitle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetTitleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionServiceServer).SetTitle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SessionService_SetTitle_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionServiceServer).SetTitle(ctx, req.(*SetTitleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SessionService_ServiceDesc is the grpc.ServiceDesc for SessionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -318,6 +352,10 @@ var SessionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTranscript",
 			Handler:    _SessionService_GetTranscript_Handler,
+		},
+		{
+			MethodName: "SetTitle",
+			Handler:    _SessionService_SetTitle_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
