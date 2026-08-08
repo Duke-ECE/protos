@@ -23,6 +23,7 @@ const (
 	SessionService_GetSession_FullMethodName    = "/session.v1.SessionService/GetSession"
 	SessionService_ListSessions_FullMethodName  = "/session.v1.SessionService/ListSessions"
 	SessionService_EndSession_FullMethodName    = "/session.v1.SessionService/EndSession"
+	SessionService_DeleteSession_FullMethodName = "/session.v1.SessionService/DeleteSession"
 	SessionService_AppendTurn_FullMethodName    = "/session.v1.SessionService/AppendTurn"
 	SessionService_GetTranscript_FullMethodName = "/session.v1.SessionService/GetTranscript"
 	SessionService_SetTitle_FullMethodName      = "/session.v1.SessionService/SetTitle"
@@ -43,6 +44,7 @@ type SessionServiceClient interface {
 	GetSession(ctx context.Context, in *GetSessionRequest, opts ...grpc.CallOption) (*GetSessionResponse, error)
 	ListSessions(ctx context.Context, in *ListSessionsRequest, opts ...grpc.CallOption) (*ListSessionsResponse, error)
 	EndSession(ctx context.Context, in *EndSessionRequest, opts ...grpc.CallOption) (*EndSessionResponse, error)
+	DeleteSession(ctx context.Context, in *DeleteSessionRequest, opts ...grpc.CallOption) (*DeleteSessionResponse, error)
 	AppendTurn(ctx context.Context, in *AppendTurnRequest, opts ...grpc.CallOption) (*AppendTurnResponse, error)
 	GetTranscript(ctx context.Context, in *GetTranscriptRequest, opts ...grpc.CallOption) (*GetTranscriptResponse, error)
 	SetTitle(ctx context.Context, in *SetTitleRequest, opts ...grpc.CallOption) (*SetTitleResponse, error)
@@ -96,6 +98,16 @@ func (c *sessionServiceClient) EndSession(ctx context.Context, in *EndSessionReq
 	return out, nil
 }
 
+func (c *sessionServiceClient) DeleteSession(ctx context.Context, in *DeleteSessionRequest, opts ...grpc.CallOption) (*DeleteSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteSessionResponse)
+	err := c.cc.Invoke(ctx, SessionService_DeleteSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *sessionServiceClient) AppendTurn(ctx context.Context, in *AppendTurnRequest, opts ...grpc.CallOption) (*AppendTurnResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AppendTurnResponse)
@@ -141,6 +153,7 @@ type SessionServiceServer interface {
 	GetSession(context.Context, *GetSessionRequest) (*GetSessionResponse, error)
 	ListSessions(context.Context, *ListSessionsRequest) (*ListSessionsResponse, error)
 	EndSession(context.Context, *EndSessionRequest) (*EndSessionResponse, error)
+	DeleteSession(context.Context, *DeleteSessionRequest) (*DeleteSessionResponse, error)
 	AppendTurn(context.Context, *AppendTurnRequest) (*AppendTurnResponse, error)
 	GetTranscript(context.Context, *GetTranscriptRequest) (*GetTranscriptResponse, error)
 	SetTitle(context.Context, *SetTitleRequest) (*SetTitleResponse, error)
@@ -165,6 +178,9 @@ func (UnimplementedSessionServiceServer) ListSessions(context.Context, *ListSess
 }
 func (UnimplementedSessionServiceServer) EndSession(context.Context, *EndSessionRequest) (*EndSessionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method EndSession not implemented")
+}
+func (UnimplementedSessionServiceServer) DeleteSession(context.Context, *DeleteSessionRequest) (*DeleteSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteSession not implemented")
 }
 func (UnimplementedSessionServiceServer) AppendTurn(context.Context, *AppendTurnRequest) (*AppendTurnResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AppendTurn not implemented")
@@ -268,6 +284,24 @@ func _SessionService_EndSession_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SessionService_DeleteSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionServiceServer).DeleteSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SessionService_DeleteSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionServiceServer).DeleteSession(ctx, req.(*DeleteSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SessionService_AppendTurn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AppendTurnRequest)
 	if err := dec(in); err != nil {
@@ -344,6 +378,10 @@ var SessionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EndSession",
 			Handler:    _SessionService_EndSession_Handler,
+		},
+		{
+			MethodName: "DeleteSession",
+			Handler:    _SessionService_DeleteSession_Handler,
 		},
 		{
 			MethodName: "AppendTurn",

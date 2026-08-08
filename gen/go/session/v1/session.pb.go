@@ -224,6 +224,8 @@ func (x *GetSessionResponse) GetSession() *Session {
 type ListSessionsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // required; only this user's sessions are returned
+	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`                // 0 = server default (50); capped (200)
+	Offset        int32                  `protobuf:"varint,3,opt,name=offset,proto3" json:"offset,omitempty"`              // 0 = first page; ordered by last_active desc
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -265,9 +267,24 @@ func (x *ListSessionsRequest) GetUserId() string {
 	return ""
 }
 
+func (x *ListSessionsRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListSessionsRequest) GetOffset() int32 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
 type ListSessionsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Sessions      []*Session             `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions,omitempty"`
+	HasMore       bool                   `protobuf:"varint,2,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"` // true when another page exists after this one
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -307,6 +324,13 @@ func (x *ListSessionsResponse) GetSessions() []*Session {
 		return x.Sessions
 	}
 	return nil
+}
+
+func (x *ListSessionsResponse) GetHasMore() bool {
+	if x != nil {
+		return x.HasMore
+	}
+	return false
 }
 
 type EndSessionRequest struct {
@@ -397,6 +421,96 @@ func (*EndSessionResponse) Descriptor() ([]byte, []int) {
 	return file_session_v1_session_proto_rawDescGZIP(), []int{7}
 }
 
+// DeleteSession permanently removes a session and its entire transcript.
+// Ownership enforced. Deleting is allowed in any status; it is irreversible.
+type DeleteSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // ownership enforced
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSessionRequest) Reset() {
+	*x = DeleteSessionRequest{}
+	mi := &file_session_v1_session_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSessionRequest) ProtoMessage() {}
+
+func (x *DeleteSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_session_v1_session_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSessionRequest.ProtoReflect.Descriptor instead.
+func (*DeleteSessionRequest) Descriptor() ([]byte, []int) {
+	return file_session_v1_session_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *DeleteSessionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+func (x *DeleteSessionRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type DeleteSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSessionResponse) Reset() {
+	*x = DeleteSessionResponse{}
+	mi := &file_session_v1_session_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSessionResponse) ProtoMessage() {}
+
+func (x *DeleteSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_session_v1_session_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSessionResponse.ProtoReflect.Descriptor instead.
+func (*DeleteSessionResponse) Descriptor() ([]byte, []int) {
+	return file_session_v1_session_proto_rawDescGZIP(), []int{9}
+}
+
 // AppendTurn is the runtime's write-through after a completed Chat turn.
 // Trusted callers only (service token), so no ownership check against
 // user_id; user_id is carried for auditing.
@@ -411,7 +525,7 @@ type AppendTurnRequest struct {
 
 func (x *AppendTurnRequest) Reset() {
 	*x = AppendTurnRequest{}
-	mi := &file_session_v1_session_proto_msgTypes[8]
+	mi := &file_session_v1_session_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -423,7 +537,7 @@ func (x *AppendTurnRequest) String() string {
 func (*AppendTurnRequest) ProtoMessage() {}
 
 func (x *AppendTurnRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[8]
+	mi := &file_session_v1_session_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -436,7 +550,7 @@ func (x *AppendTurnRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppendTurnRequest.ProtoReflect.Descriptor instead.
 func (*AppendTurnRequest) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{8}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *AppendTurnRequest) GetSessionId() string {
@@ -468,7 +582,7 @@ type AppendTurnResponse struct {
 
 func (x *AppendTurnResponse) Reset() {
 	*x = AppendTurnResponse{}
-	mi := &file_session_v1_session_proto_msgTypes[9]
+	mi := &file_session_v1_session_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -480,7 +594,7 @@ func (x *AppendTurnResponse) String() string {
 func (*AppendTurnResponse) ProtoMessage() {}
 
 func (x *AppendTurnResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[9]
+	mi := &file_session_v1_session_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -493,22 +607,29 @@ func (x *AppendTurnResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppendTurnResponse.ProtoReflect.Descriptor instead.
 func (*AppendTurnResponse) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{9}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{11}
 }
 
-// GetTranscript returns the full ordered transcript. Allowed for the session
-// owner (user_id matches) or for a service-token caller (runtime hydration).
+// GetTranscript returns the transcript. Allowed for the session owner
+// (user_id matches) or for a service-token caller (runtime hydration).
+// Pagination: with limit > 0 the server returns the latest window — the up
+// to `limit` messages with seq < before_seq (before_seq = 0 means "from the
+// end"), in ascending seq order; has_more is true when older messages exist
+// before the window. With limit = 0 the full transcript is returned
+// (legacy behavior, has_more always false).
 type GetTranscriptRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`                          // 0 = full transcript; capped (1000)
+	BeforeSeq     int32                  `protobuf:"varint,4,opt,name=before_seq,json=beforeSeq,proto3" json:"before_seq,omitempty"` // 0 = start from the latest messages
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetTranscriptRequest) Reset() {
 	*x = GetTranscriptRequest{}
-	mi := &file_session_v1_session_proto_msgTypes[10]
+	mi := &file_session_v1_session_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -520,7 +641,7 @@ func (x *GetTranscriptRequest) String() string {
 func (*GetTranscriptRequest) ProtoMessage() {}
 
 func (x *GetTranscriptRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[10]
+	mi := &file_session_v1_session_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -533,7 +654,7 @@ func (x *GetTranscriptRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTranscriptRequest.ProtoReflect.Descriptor instead.
 func (*GetTranscriptRequest) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{10}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetTranscriptRequest) GetSessionId() string {
@@ -550,16 +671,31 @@ func (x *GetTranscriptRequest) GetUserId() string {
 	return ""
 }
 
+func (x *GetTranscriptRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *GetTranscriptRequest) GetBeforeSeq() int32 {
+	if x != nil {
+		return x.BeforeSeq
+	}
+	return 0
+}
+
 type GetTranscriptResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Messages      []*TurnMessage         `protobuf:"bytes,1,rep,name=messages,proto3" json:"messages,omitempty"` // ordered by seq
+	Messages      []*TurnMessage         `protobuf:"bytes,1,rep,name=messages,proto3" json:"messages,omitempty"`               // ordered by seq
+	HasMore       bool                   `protobuf:"varint,2,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"` // true when older messages exist before this window
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetTranscriptResponse) Reset() {
 	*x = GetTranscriptResponse{}
-	mi := &file_session_v1_session_proto_msgTypes[11]
+	mi := &file_session_v1_session_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -571,7 +707,7 @@ func (x *GetTranscriptResponse) String() string {
 func (*GetTranscriptResponse) ProtoMessage() {}
 
 func (x *GetTranscriptResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[11]
+	mi := &file_session_v1_session_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -584,7 +720,7 @@ func (x *GetTranscriptResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTranscriptResponse.ProtoReflect.Descriptor instead.
 func (*GetTranscriptResponse) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{11}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetTranscriptResponse) GetMessages() []*TurnMessage {
@@ -594,21 +730,30 @@ func (x *GetTranscriptResponse) GetMessages() []*TurnMessage {
 	return nil
 }
 
+func (x *GetTranscriptResponse) GetHasMore() bool {
+	if x != nil {
+		return x.HasMore
+	}
+	return false
+}
+
 // SetTitle sets the session's display title (e.g. an LLM-generated summary
-// of the first turn). Runtime-internal: service token required; setting a
-// title on an ended session is allowed (titles are editable metadata, not
+// of the first turn, or a user rename). Allowed for the session owner
+// (user_id matches) or a service-token caller (runtime auto-titles); setting
+// a title on an ended session is allowed (titles are editable metadata, not
 // transcript content).
 type SetTitleRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"` // empty title is rejected
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`                 // empty title is rejected
+	UserId        string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // owner path; when empty, the service token decides
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SetTitleRequest) Reset() {
 	*x = SetTitleRequest{}
-	mi := &file_session_v1_session_proto_msgTypes[12]
+	mi := &file_session_v1_session_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -620,7 +765,7 @@ func (x *SetTitleRequest) String() string {
 func (*SetTitleRequest) ProtoMessage() {}
 
 func (x *SetTitleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[12]
+	mi := &file_session_v1_session_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -633,7 +778,7 @@ func (x *SetTitleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetTitleRequest.ProtoReflect.Descriptor instead.
 func (*SetTitleRequest) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{12}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *SetTitleRequest) GetSessionId() string {
@@ -650,6 +795,13 @@ func (x *SetTitleRequest) GetTitle() string {
 	return ""
 }
 
+func (x *SetTitleRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
 type SetTitleResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Session       *Session               `protobuf:"bytes,1,opt,name=session,proto3" json:"session,omitempty"`
@@ -659,7 +811,7 @@ type SetTitleResponse struct {
 
 func (x *SetTitleResponse) Reset() {
 	*x = SetTitleResponse{}
-	mi := &file_session_v1_session_proto_msgTypes[13]
+	mi := &file_session_v1_session_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -671,7 +823,7 @@ func (x *SetTitleResponse) String() string {
 func (*SetTitleResponse) ProtoMessage() {}
 
 func (x *SetTitleResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[13]
+	mi := &file_session_v1_session_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -684,7 +836,7 @@ func (x *SetTitleResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetTitleResponse.ProtoReflect.Descriptor instead.
 func (*SetTitleResponse) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{13}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *SetTitleResponse) GetSession() *Session {
@@ -711,7 +863,7 @@ type Session struct {
 
 func (x *Session) Reset() {
 	*x = Session{}
-	mi := &file_session_v1_session_proto_msgTypes[14]
+	mi := &file_session_v1_session_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -723,7 +875,7 @@ func (x *Session) String() string {
 func (*Session) ProtoMessage() {}
 
 func (x *Session) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[14]
+	mi := &file_session_v1_session_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -736,7 +888,7 @@ func (x *Session) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Session.ProtoReflect.Descriptor instead.
 func (*Session) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{14}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *Session) GetId() string {
@@ -816,7 +968,7 @@ type TurnMessage struct {
 
 func (x *TurnMessage) Reset() {
 	*x = TurnMessage{}
-	mi := &file_session_v1_session_proto_msgTypes[15]
+	mi := &file_session_v1_session_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -828,7 +980,7 @@ func (x *TurnMessage) String() string {
 func (*TurnMessage) ProtoMessage() {}
 
 func (x *TurnMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_session_v1_session_proto_msgTypes[15]
+	mi := &file_session_v1_session_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -841,7 +993,7 @@ func (x *TurnMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TurnMessage.ProtoReflect.Descriptor instead.
 func (*TurnMessage) Descriptor() ([]byte, []int) {
-	return file_session_v1_session_proto_rawDescGZIP(), []int{15}
+	return file_session_v1_session_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *TurnMessage) GetSeq() int32 {
@@ -889,32 +1041,45 @@ const file_session_v1_session_proto_rawDesc = "" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\"C\n" +
 	"\x12GetSessionResponse\x12-\n" +
-	"\asession\x18\x01 \x01(\v2\x13.session.v1.SessionR\asession\".\n" +
+	"\asession\x18\x01 \x01(\v2\x13.session.v1.SessionR\asession\"\\\n" +
 	"\x13ListSessionsRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"G\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
+	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x16\n" +
+	"\x06offset\x18\x03 \x01(\x05R\x06offset\"b\n" +
 	"\x14ListSessionsResponse\x12/\n" +
-	"\bsessions\x18\x01 \x03(\v2\x13.session.v1.SessionR\bsessions\"K\n" +
+	"\bsessions\x18\x01 \x03(\v2\x13.session.v1.SessionR\bsessions\x12\x19\n" +
+	"\bhas_more\x18\x02 \x01(\bR\ahasMore\"K\n" +
 	"\x11EndSessionRequest\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\"\x14\n" +
-	"\x12EndSessionResponse\"\x80\x01\n" +
+	"\x12EndSessionResponse\"N\n" +
+	"\x14DeleteSessionRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"\x17\n" +
+	"\x15DeleteSessionResponse\"\x80\x01\n" +
 	"\x11AppendTurnRequest\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x123\n" +
 	"\bmessages\x18\x03 \x03(\v2\x17.session.v1.TurnMessageR\bmessages\"\x14\n" +
-	"\x12AppendTurnResponse\"N\n" +
+	"\x12AppendTurnResponse\"\x83\x01\n" +
 	"\x14GetTranscriptRequest\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\"L\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x14\n" +
+	"\x05limit\x18\x03 \x01(\x05R\x05limit\x12\x1d\n" +
+	"\n" +
+	"before_seq\x18\x04 \x01(\x05R\tbeforeSeq\"g\n" +
 	"\x15GetTranscriptResponse\x123\n" +
-	"\bmessages\x18\x01 \x03(\v2\x17.session.v1.TurnMessageR\bmessages\"F\n" +
+	"\bmessages\x18\x01 \x03(\v2\x17.session.v1.TurnMessageR\bmessages\x12\x19\n" +
+	"\bhas_more\x18\x02 \x01(\bR\ahasMore\"_\n" +
 	"\x0fSetTitleRequest\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x14\n" +
-	"\x05title\x18\x02 \x01(\tR\x05title\"A\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12\x17\n" +
+	"\auser_id\x18\x03 \x01(\tR\x06userId\"A\n" +
 	"\x10SetTitleResponse\x12-\n" +
 	"\asession\x18\x01 \x01(\v2\x13.session.v1.SessionR\asession\"\xf3\x01\n" +
 	"\aSession\x12\x0e\n" +
@@ -934,14 +1099,15 @@ const file_session_v1_session_proto_rawDesc = "" +
 	"\x04role\x18\x02 \x01(\tR\x04role\x12!\n" +
 	"\fcontent_json\x18\x03 \x01(\tR\vcontentJson\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\x04 \x01(\tR\tcreatedAt2\xbd\x04\n" +
+	"created_at\x18\x04 \x01(\tR\tcreatedAt2\x93\x05\n" +
 	"\x0eSessionService\x12T\n" +
 	"\rCreateSession\x12 .session.v1.CreateSessionRequest\x1a!.session.v1.CreateSessionResponse\x12K\n" +
 	"\n" +
 	"GetSession\x12\x1d.session.v1.GetSessionRequest\x1a\x1e.session.v1.GetSessionResponse\x12Q\n" +
 	"\fListSessions\x12\x1f.session.v1.ListSessionsRequest\x1a .session.v1.ListSessionsResponse\x12K\n" +
 	"\n" +
-	"EndSession\x12\x1d.session.v1.EndSessionRequest\x1a\x1e.session.v1.EndSessionResponse\x12K\n" +
+	"EndSession\x12\x1d.session.v1.EndSessionRequest\x1a\x1e.session.v1.EndSessionResponse\x12T\n" +
+	"\rDeleteSession\x12 .session.v1.DeleteSessionRequest\x1a!.session.v1.DeleteSessionResponse\x12K\n" +
 	"\n" +
 	"AppendTurn\x12\x1d.session.v1.AppendTurnRequest\x1a\x1e.session.v1.AppendTurnResponse\x12T\n" +
 	"\rGetTranscript\x12 .session.v1.GetTranscriptRequest\x1a!.session.v1.GetTranscriptResponse\x12E\n" +
@@ -959,7 +1125,7 @@ func file_session_v1_session_proto_rawDescGZIP() []byte {
 	return file_session_v1_session_proto_rawDescData
 }
 
-var file_session_v1_session_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_session_v1_session_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_session_v1_session_proto_goTypes = []any{
 	(*CreateSessionRequest)(nil),  // 0: session.v1.CreateSessionRequest
 	(*CreateSessionResponse)(nil), // 1: session.v1.CreateSessionResponse
@@ -969,38 +1135,42 @@ var file_session_v1_session_proto_goTypes = []any{
 	(*ListSessionsResponse)(nil),  // 5: session.v1.ListSessionsResponse
 	(*EndSessionRequest)(nil),     // 6: session.v1.EndSessionRequest
 	(*EndSessionResponse)(nil),    // 7: session.v1.EndSessionResponse
-	(*AppendTurnRequest)(nil),     // 8: session.v1.AppendTurnRequest
-	(*AppendTurnResponse)(nil),    // 9: session.v1.AppendTurnResponse
-	(*GetTranscriptRequest)(nil),  // 10: session.v1.GetTranscriptRequest
-	(*GetTranscriptResponse)(nil), // 11: session.v1.GetTranscriptResponse
-	(*SetTitleRequest)(nil),       // 12: session.v1.SetTitleRequest
-	(*SetTitleResponse)(nil),      // 13: session.v1.SetTitleResponse
-	(*Session)(nil),               // 14: session.v1.Session
-	(*TurnMessage)(nil),           // 15: session.v1.TurnMessage
+	(*DeleteSessionRequest)(nil),  // 8: session.v1.DeleteSessionRequest
+	(*DeleteSessionResponse)(nil), // 9: session.v1.DeleteSessionResponse
+	(*AppendTurnRequest)(nil),     // 10: session.v1.AppendTurnRequest
+	(*AppendTurnResponse)(nil),    // 11: session.v1.AppendTurnResponse
+	(*GetTranscriptRequest)(nil),  // 12: session.v1.GetTranscriptRequest
+	(*GetTranscriptResponse)(nil), // 13: session.v1.GetTranscriptResponse
+	(*SetTitleRequest)(nil),       // 14: session.v1.SetTitleRequest
+	(*SetTitleResponse)(nil),      // 15: session.v1.SetTitleResponse
+	(*Session)(nil),               // 16: session.v1.Session
+	(*TurnMessage)(nil),           // 17: session.v1.TurnMessage
 }
 var file_session_v1_session_proto_depIdxs = []int32{
-	14, // 0: session.v1.CreateSessionResponse.session:type_name -> session.v1.Session
-	14, // 1: session.v1.GetSessionResponse.session:type_name -> session.v1.Session
-	14, // 2: session.v1.ListSessionsResponse.sessions:type_name -> session.v1.Session
-	15, // 3: session.v1.AppendTurnRequest.messages:type_name -> session.v1.TurnMessage
-	15, // 4: session.v1.GetTranscriptResponse.messages:type_name -> session.v1.TurnMessage
-	14, // 5: session.v1.SetTitleResponse.session:type_name -> session.v1.Session
+	16, // 0: session.v1.CreateSessionResponse.session:type_name -> session.v1.Session
+	16, // 1: session.v1.GetSessionResponse.session:type_name -> session.v1.Session
+	16, // 2: session.v1.ListSessionsResponse.sessions:type_name -> session.v1.Session
+	17, // 3: session.v1.AppendTurnRequest.messages:type_name -> session.v1.TurnMessage
+	17, // 4: session.v1.GetTranscriptResponse.messages:type_name -> session.v1.TurnMessage
+	16, // 5: session.v1.SetTitleResponse.session:type_name -> session.v1.Session
 	0,  // 6: session.v1.SessionService.CreateSession:input_type -> session.v1.CreateSessionRequest
 	2,  // 7: session.v1.SessionService.GetSession:input_type -> session.v1.GetSessionRequest
 	4,  // 8: session.v1.SessionService.ListSessions:input_type -> session.v1.ListSessionsRequest
 	6,  // 9: session.v1.SessionService.EndSession:input_type -> session.v1.EndSessionRequest
-	8,  // 10: session.v1.SessionService.AppendTurn:input_type -> session.v1.AppendTurnRequest
-	10, // 11: session.v1.SessionService.GetTranscript:input_type -> session.v1.GetTranscriptRequest
-	12, // 12: session.v1.SessionService.SetTitle:input_type -> session.v1.SetTitleRequest
-	1,  // 13: session.v1.SessionService.CreateSession:output_type -> session.v1.CreateSessionResponse
-	3,  // 14: session.v1.SessionService.GetSession:output_type -> session.v1.GetSessionResponse
-	5,  // 15: session.v1.SessionService.ListSessions:output_type -> session.v1.ListSessionsResponse
-	7,  // 16: session.v1.SessionService.EndSession:output_type -> session.v1.EndSessionResponse
-	9,  // 17: session.v1.SessionService.AppendTurn:output_type -> session.v1.AppendTurnResponse
-	11, // 18: session.v1.SessionService.GetTranscript:output_type -> session.v1.GetTranscriptResponse
-	13, // 19: session.v1.SessionService.SetTitle:output_type -> session.v1.SetTitleResponse
-	13, // [13:20] is the sub-list for method output_type
-	6,  // [6:13] is the sub-list for method input_type
+	8,  // 10: session.v1.SessionService.DeleteSession:input_type -> session.v1.DeleteSessionRequest
+	10, // 11: session.v1.SessionService.AppendTurn:input_type -> session.v1.AppendTurnRequest
+	12, // 12: session.v1.SessionService.GetTranscript:input_type -> session.v1.GetTranscriptRequest
+	14, // 13: session.v1.SessionService.SetTitle:input_type -> session.v1.SetTitleRequest
+	1,  // 14: session.v1.SessionService.CreateSession:output_type -> session.v1.CreateSessionResponse
+	3,  // 15: session.v1.SessionService.GetSession:output_type -> session.v1.GetSessionResponse
+	5,  // 16: session.v1.SessionService.ListSessions:output_type -> session.v1.ListSessionsResponse
+	7,  // 17: session.v1.SessionService.EndSession:output_type -> session.v1.EndSessionResponse
+	9,  // 18: session.v1.SessionService.DeleteSession:output_type -> session.v1.DeleteSessionResponse
+	11, // 19: session.v1.SessionService.AppendTurn:output_type -> session.v1.AppendTurnResponse
+	13, // 20: session.v1.SessionService.GetTranscript:output_type -> session.v1.GetTranscriptResponse
+	15, // 21: session.v1.SessionService.SetTitle:output_type -> session.v1.SetTitleResponse
+	14, // [14:22] is the sub-list for method output_type
+	6,  // [6:14] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
 	6,  // [6:6] is the sub-list for extension extendee
 	0,  // [0:6] is the sub-list for field type_name
@@ -1017,7 +1187,7 @@ func file_session_v1_session_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_session_v1_session_proto_rawDesc), len(file_session_v1_session_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
