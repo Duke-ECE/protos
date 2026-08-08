@@ -103,7 +103,9 @@ message Session {
 
 message TurnMessage {
   int32 seq = 1;
-  string role = 2;  // "user" | "assistant" | "tool_call" | "tool_result"
+  string role = 2;  // "user" | "assistant" | "tool_call" | "tool_result" |
+                    // "system" (the session's persisted system prompt;
+                    // re-recorded when it changes, never a chat message)
   string content_json = 3;  // role-specific payload, JSON-encoded
   string created_at = 4;  // RFC 3339
 }
