@@ -959,7 +959,9 @@ type TurnMessage struct {
 	Seq   int32                  `protobuf:"varint,1,opt,name=seq,proto3" json:"seq,omitempty"`
 	Role  string                 `protobuf:"bytes,2,opt,name=role,proto3" json:"role,omitempty"` // "user" | "assistant" | "tool_call" | "tool_result" |
 	// "system" (the session's persisted system prompt;
-	// re-recorded when it changes, never a chat message)
+	// re-recorded when it changes, never a chat message) |
+	// "config" (the session's frozen resolved LLM triple;
+	// api_key is redacted on owner-path reads)
 	ContentJson   string `protobuf:"bytes,3,opt,name=content_json,json=contentJson,proto3" json:"content_json,omitempty"` // role-specific payload, JSON-encoded
 	CreatedAt     string `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`       // RFC 3339
 	unknownFields protoimpl.UnknownFields
