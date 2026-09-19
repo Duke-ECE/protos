@@ -12,7 +12,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: bufbuild/buf-setup-action@v1
       - run: buf lint
-      - run: buf breaking --against '.git#branch=main,subdir=proto'
+      # buf breaking resolves the comparison ref from the local clone, but a
+      # pull_request checkout is a detached shallow clone with no local base
+      # branch (`fatal: couldn't find remote ref main`). Materialize it first.
+      - name: Fetch base branch for breaking-change detection
+        if: github.event_name == 'pull_request'
+        run: git fetch --no-tags --depth=1 origin "refs/heads/${{ github.base_ref }}:refs/heads/${{ github.base_ref }}"
+      - run: buf breaking --against '.git#branch=${{ github.base_ref }},subdir=proto'
         if: github.event_name == 'pull_request'
       - uses: actions/setup-go@v5
         with:
