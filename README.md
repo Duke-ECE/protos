@@ -1,7 +1,7 @@
 # protos
 
 Single source of truth for all `.proto` contracts in the Duke-ECE
-managed-agents project. Generated Go code is committed under `gen/go/`, so
+PolyAgent project. Generated Go code is committed under `gen/go/`, so
 consumers only need `go get` — no protoc/buf setup required.
 
 ## Layout
