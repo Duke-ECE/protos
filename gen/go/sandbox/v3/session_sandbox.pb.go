@@ -422,6 +422,7 @@ type EditTool struct {
 	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
 	OldText       string                 `protobuf:"bytes,2,opt,name=old_text,json=oldText,proto3" json:"old_text,omitempty"`
 	NewText       string                 `protobuf:"bytes,3,opt,name=new_text,json=newText,proto3" json:"new_text,omitempty"`
+	Edits         []*EditReplacement     `protobuf:"bytes,4,rep,name=edits,proto3" json:"edits,omitempty"` // applied against one original file snapshot
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -477,6 +478,65 @@ func (x *EditTool) GetNewText() string {
 	return ""
 }
 
+func (x *EditTool) GetEdits() []*EditReplacement {
+	if x != nil {
+		return x.Edits
+	}
+	return nil
+}
+
+type EditReplacement struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OldText       string                 `protobuf:"bytes,1,opt,name=old_text,json=oldText,proto3" json:"old_text,omitempty"`
+	NewText       string                 `protobuf:"bytes,2,opt,name=new_text,json=newText,proto3" json:"new_text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EditReplacement) Reset() {
+	*x = EditReplacement{}
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EditReplacement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EditReplacement) ProtoMessage() {}
+
+func (x *EditReplacement) ProtoReflect() protoreflect.Message {
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EditReplacement.ProtoReflect.Descriptor instead.
+func (*EditReplacement) Descriptor() ([]byte, []int) {
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *EditReplacement) GetOldText() string {
+	if x != nil {
+		return x.OldText
+	}
+	return ""
+}
+
+func (x *EditReplacement) GetNewText() string {
+	if x != nil {
+		return x.NewText
+	}
+	return ""
+}
+
 type BashTool struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Command       string                 `protobuf:"bytes,1,opt,name=command,proto3" json:"command,omitempty"`
@@ -486,7 +546,7 @@ type BashTool struct {
 
 func (x *BashTool) Reset() {
 	*x = BashTool{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[6]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -498,7 +558,7 @@ func (x *BashTool) String() string {
 func (*BashTool) ProtoMessage() {}
 
 func (x *BashTool) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[6]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -511,7 +571,7 @@ func (x *BashTool) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BashTool.ProtoReflect.Descriptor instead.
 func (*BashTool) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{6}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *BashTool) GetCommand() string {
@@ -533,7 +593,7 @@ type ExecuteToolResponse struct {
 
 func (x *ExecuteToolResponse) Reset() {
 	*x = ExecuteToolResponse{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[7]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -545,7 +605,7 @@ func (x *ExecuteToolResponse) String() string {
 func (*ExecuteToolResponse) ProtoMessage() {}
 
 func (x *ExecuteToolResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[7]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -558,7 +618,7 @@ func (x *ExecuteToolResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteToolResponse.ProtoReflect.Descriptor instead.
 func (*ExecuteToolResponse) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{7}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ExecuteToolResponse) GetExitCode() int32 {
@@ -602,7 +662,7 @@ type PutResourceRequest struct {
 
 func (x *PutResourceRequest) Reset() {
 	*x = PutResourceRequest{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[8]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -614,7 +674,7 @@ func (x *PutResourceRequest) String() string {
 func (*PutResourceRequest) ProtoMessage() {}
 
 func (x *PutResourceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[8]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -627,7 +687,7 @@ func (x *PutResourceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PutResourceRequest.ProtoReflect.Descriptor instead.
 func (*PutResourceRequest) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{8}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *PutResourceRequest) GetSessionId() string {
@@ -660,7 +720,7 @@ type PutResourceResponse struct {
 
 func (x *PutResourceResponse) Reset() {
 	*x = PutResourceResponse{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[9]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -672,7 +732,7 @@ func (x *PutResourceResponse) String() string {
 func (*PutResourceResponse) ProtoMessage() {}
 
 func (x *PutResourceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[9]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -685,7 +745,7 @@ func (x *PutResourceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PutResourceResponse.ProtoReflect.Descriptor instead.
 func (*PutResourceResponse) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{9}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *PutResourceResponse) GetBytesWritten() int64 {
@@ -705,7 +765,7 @@ type GetResourceRequest struct {
 
 func (x *GetResourceRequest) Reset() {
 	*x = GetResourceRequest{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[10]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -717,7 +777,7 @@ func (x *GetResourceRequest) String() string {
 func (*GetResourceRequest) ProtoMessage() {}
 
 func (x *GetResourceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[10]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -730,7 +790,7 @@ func (x *GetResourceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetResourceRequest.ProtoReflect.Descriptor instead.
 func (*GetResourceRequest) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{10}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetResourceRequest) GetSessionId() string {
@@ -756,7 +816,7 @@ type GetResourceResponse struct {
 
 func (x *GetResourceResponse) Reset() {
 	*x = GetResourceResponse{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[11]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -768,7 +828,7 @@ func (x *GetResourceResponse) String() string {
 func (*GetResourceResponse) ProtoMessage() {}
 
 func (x *GetResourceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[11]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -781,7 +841,7 @@ func (x *GetResourceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetResourceResponse.ProtoReflect.Descriptor instead.
 func (*GetResourceResponse) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{11}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetResourceResponse) GetChunk() []byte {
@@ -800,7 +860,7 @@ type CloseSessionSandboxRequest struct {
 
 func (x *CloseSessionSandboxRequest) Reset() {
 	*x = CloseSessionSandboxRequest{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[12]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -812,7 +872,7 @@ func (x *CloseSessionSandboxRequest) String() string {
 func (*CloseSessionSandboxRequest) ProtoMessage() {}
 
 func (x *CloseSessionSandboxRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[12]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -825,7 +885,7 @@ func (x *CloseSessionSandboxRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CloseSessionSandboxRequest.ProtoReflect.Descriptor instead.
 func (*CloseSessionSandboxRequest) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{12}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CloseSessionSandboxRequest) GetSessionId() string {
@@ -843,7 +903,7 @@ type CloseSessionSandboxResponse struct {
 
 func (x *CloseSessionSandboxResponse) Reset() {
 	*x = CloseSessionSandboxResponse{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[13]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -855,7 +915,7 @@ func (x *CloseSessionSandboxResponse) String() string {
 func (*CloseSessionSandboxResponse) ProtoMessage() {}
 
 func (x *CloseSessionSandboxResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[13]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -868,7 +928,7 @@ func (x *CloseSessionSandboxResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CloseSessionSandboxResponse.ProtoReflect.Descriptor instead.
 func (*CloseSessionSandboxResponse) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{13}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{14}
 }
 
 type GetSessionSandboxStatusRequest struct {
@@ -880,7 +940,7 @@ type GetSessionSandboxStatusRequest struct {
 
 func (x *GetSessionSandboxStatusRequest) Reset() {
 	*x = GetSessionSandboxStatusRequest{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[14]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -892,7 +952,7 @@ func (x *GetSessionSandboxStatusRequest) String() string {
 func (*GetSessionSandboxStatusRequest) ProtoMessage() {}
 
 func (x *GetSessionSandboxStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[14]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -905,7 +965,7 @@ func (x *GetSessionSandboxStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSessionSandboxStatusRequest.ProtoReflect.Descriptor instead.
 func (*GetSessionSandboxStatusRequest) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{14}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetSessionSandboxStatusRequest) GetSessionId() string {
@@ -924,7 +984,7 @@ type GetSessionSandboxStatusResponse struct {
 
 func (x *GetSessionSandboxStatusResponse) Reset() {
 	*x = GetSessionSandboxStatusResponse{}
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[15]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -936,7 +996,7 @@ func (x *GetSessionSandboxStatusResponse) String() string {
 func (*GetSessionSandboxStatusResponse) ProtoMessage() {}
 
 func (x *GetSessionSandboxStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[15]
+	mi := &file_sandbox_v3_session_sandbox_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -949,7 +1009,7 @@ func (x *GetSessionSandboxStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSessionSandboxStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetSessionSandboxStatusResponse) Descriptor() ([]byte, []int) {
-	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{15}
+	return file_sandbox_v3_session_sandbox_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetSessionSandboxStatusResponse) GetState() SessionSandboxState {
@@ -988,11 +1048,15 @@ const file_sandbox_v3_session_sandbox_proto_rawDesc = "" +
 	"limitLines\"9\n" +
 	"\tWriteTool\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12\x18\n" +
-	"\acontent\x18\x02 \x01(\tR\acontent\"T\n" +
+	"\acontent\x18\x02 \x01(\tR\acontent\"\x87\x01\n" +
 	"\bEditTool\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12\x19\n" +
 	"\bold_text\x18\x02 \x01(\tR\aoldText\x12\x19\n" +
-	"\bnew_text\x18\x03 \x01(\tR\anewText\"$\n" +
+	"\bnew_text\x18\x03 \x01(\tR\anewText\x121\n" +
+	"\x05edits\x18\x04 \x03(\v2\x1b.sandbox.v3.EditReplacementR\x05edits\"G\n" +
+	"\x0fEditReplacement\x12\x19\n" +
+	"\bold_text\x18\x01 \x01(\tR\aoldText\x12\x19\n" +
+	"\bnew_text\x18\x02 \x01(\tR\anewText\"$\n" +
 	"\bBashTool\x12\x18\n" +
 	"\acommand\x18\x01 \x01(\tR\acommand\"\x80\x01\n" +
 	"\x13ExecuteToolResponse\x12\x1b\n" +
@@ -1050,7 +1114,7 @@ func file_sandbox_v3_session_sandbox_proto_rawDescGZIP() []byte {
 }
 
 var file_sandbox_v3_session_sandbox_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sandbox_v3_session_sandbox_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_sandbox_v3_session_sandbox_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_sandbox_v3_session_sandbox_proto_goTypes = []any{
 	(SessionSandboxState)(0),                // 0: sandbox.v3.SessionSandboxState
 	(*EnsureSessionSandboxRequest)(nil),     // 1: sandbox.v3.EnsureSessionSandboxRequest
@@ -1059,41 +1123,43 @@ var file_sandbox_v3_session_sandbox_proto_goTypes = []any{
 	(*ReadTool)(nil),                        // 4: sandbox.v3.ReadTool
 	(*WriteTool)(nil),                       // 5: sandbox.v3.WriteTool
 	(*EditTool)(nil),                        // 6: sandbox.v3.EditTool
-	(*BashTool)(nil),                        // 7: sandbox.v3.BashTool
-	(*ExecuteToolResponse)(nil),             // 8: sandbox.v3.ExecuteToolResponse
-	(*PutResourceRequest)(nil),              // 9: sandbox.v3.PutResourceRequest
-	(*PutResourceResponse)(nil),             // 10: sandbox.v3.PutResourceResponse
-	(*GetResourceRequest)(nil),              // 11: sandbox.v3.GetResourceRequest
-	(*GetResourceResponse)(nil),             // 12: sandbox.v3.GetResourceResponse
-	(*CloseSessionSandboxRequest)(nil),      // 13: sandbox.v3.CloseSessionSandboxRequest
-	(*CloseSessionSandboxResponse)(nil),     // 14: sandbox.v3.CloseSessionSandboxResponse
-	(*GetSessionSandboxStatusRequest)(nil),  // 15: sandbox.v3.GetSessionSandboxStatusRequest
-	(*GetSessionSandboxStatusResponse)(nil), // 16: sandbox.v3.GetSessionSandboxStatusResponse
+	(*EditReplacement)(nil),                 // 7: sandbox.v3.EditReplacement
+	(*BashTool)(nil),                        // 8: sandbox.v3.BashTool
+	(*ExecuteToolResponse)(nil),             // 9: sandbox.v3.ExecuteToolResponse
+	(*PutResourceRequest)(nil),              // 10: sandbox.v3.PutResourceRequest
+	(*PutResourceResponse)(nil),             // 11: sandbox.v3.PutResourceResponse
+	(*GetResourceRequest)(nil),              // 12: sandbox.v3.GetResourceRequest
+	(*GetResourceResponse)(nil),             // 13: sandbox.v3.GetResourceResponse
+	(*CloseSessionSandboxRequest)(nil),      // 14: sandbox.v3.CloseSessionSandboxRequest
+	(*CloseSessionSandboxResponse)(nil),     // 15: sandbox.v3.CloseSessionSandboxResponse
+	(*GetSessionSandboxStatusRequest)(nil),  // 16: sandbox.v3.GetSessionSandboxStatusRequest
+	(*GetSessionSandboxStatusResponse)(nil), // 17: sandbox.v3.GetSessionSandboxStatusResponse
 }
 var file_sandbox_v3_session_sandbox_proto_depIdxs = []int32{
 	0,  // 0: sandbox.v3.EnsureSessionSandboxResponse.state:type_name -> sandbox.v3.SessionSandboxState
 	4,  // 1: sandbox.v3.ExecuteToolRequest.read:type_name -> sandbox.v3.ReadTool
 	5,  // 2: sandbox.v3.ExecuteToolRequest.write:type_name -> sandbox.v3.WriteTool
 	6,  // 3: sandbox.v3.ExecuteToolRequest.edit:type_name -> sandbox.v3.EditTool
-	7,  // 4: sandbox.v3.ExecuteToolRequest.bash:type_name -> sandbox.v3.BashTool
-	0,  // 5: sandbox.v3.GetSessionSandboxStatusResponse.state:type_name -> sandbox.v3.SessionSandboxState
-	1,  // 6: sandbox.v3.SessionSandboxService.EnsureSessionSandbox:input_type -> sandbox.v3.EnsureSessionSandboxRequest
-	3,  // 7: sandbox.v3.SessionSandboxService.ExecuteTool:input_type -> sandbox.v3.ExecuteToolRequest
-	9,  // 8: sandbox.v3.SessionSandboxService.PutResource:input_type -> sandbox.v3.PutResourceRequest
-	11, // 9: sandbox.v3.SessionSandboxService.GetResource:input_type -> sandbox.v3.GetResourceRequest
-	13, // 10: sandbox.v3.SessionSandboxService.CloseSessionSandbox:input_type -> sandbox.v3.CloseSessionSandboxRequest
-	15, // 11: sandbox.v3.SessionSandboxService.GetSessionSandboxStatus:input_type -> sandbox.v3.GetSessionSandboxStatusRequest
-	2,  // 12: sandbox.v3.SessionSandboxService.EnsureSessionSandbox:output_type -> sandbox.v3.EnsureSessionSandboxResponse
-	8,  // 13: sandbox.v3.SessionSandboxService.ExecuteTool:output_type -> sandbox.v3.ExecuteToolResponse
-	10, // 14: sandbox.v3.SessionSandboxService.PutResource:output_type -> sandbox.v3.PutResourceResponse
-	12, // 15: sandbox.v3.SessionSandboxService.GetResource:output_type -> sandbox.v3.GetResourceResponse
-	14, // 16: sandbox.v3.SessionSandboxService.CloseSessionSandbox:output_type -> sandbox.v3.CloseSessionSandboxResponse
-	16, // 17: sandbox.v3.SessionSandboxService.GetSessionSandboxStatus:output_type -> sandbox.v3.GetSessionSandboxStatusResponse
-	12, // [12:18] is the sub-list for method output_type
-	6,  // [6:12] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	8,  // 4: sandbox.v3.ExecuteToolRequest.bash:type_name -> sandbox.v3.BashTool
+	7,  // 5: sandbox.v3.EditTool.edits:type_name -> sandbox.v3.EditReplacement
+	0,  // 6: sandbox.v3.GetSessionSandboxStatusResponse.state:type_name -> sandbox.v3.SessionSandboxState
+	1,  // 7: sandbox.v3.SessionSandboxService.EnsureSessionSandbox:input_type -> sandbox.v3.EnsureSessionSandboxRequest
+	3,  // 8: sandbox.v3.SessionSandboxService.ExecuteTool:input_type -> sandbox.v3.ExecuteToolRequest
+	10, // 9: sandbox.v3.SessionSandboxService.PutResource:input_type -> sandbox.v3.PutResourceRequest
+	12, // 10: sandbox.v3.SessionSandboxService.GetResource:input_type -> sandbox.v3.GetResourceRequest
+	14, // 11: sandbox.v3.SessionSandboxService.CloseSessionSandbox:input_type -> sandbox.v3.CloseSessionSandboxRequest
+	16, // 12: sandbox.v3.SessionSandboxService.GetSessionSandboxStatus:input_type -> sandbox.v3.GetSessionSandboxStatusRequest
+	2,  // 13: sandbox.v3.SessionSandboxService.EnsureSessionSandbox:output_type -> sandbox.v3.EnsureSessionSandboxResponse
+	9,  // 14: sandbox.v3.SessionSandboxService.ExecuteTool:output_type -> sandbox.v3.ExecuteToolResponse
+	11, // 15: sandbox.v3.SessionSandboxService.PutResource:output_type -> sandbox.v3.PutResourceResponse
+	13, // 16: sandbox.v3.SessionSandboxService.GetResource:output_type -> sandbox.v3.GetResourceResponse
+	15, // 17: sandbox.v3.SessionSandboxService.CloseSessionSandbox:output_type -> sandbox.v3.CloseSessionSandboxResponse
+	17, // 18: sandbox.v3.SessionSandboxService.GetSessionSandboxStatus:output_type -> sandbox.v3.GetSessionSandboxStatusResponse
+	13, // [13:19] is the sub-list for method output_type
+	7,  // [7:13] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_sandbox_v3_session_sandbox_proto_init() }
@@ -1113,7 +1179,7 @@ func file_sandbox_v3_session_sandbox_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sandbox_v3_session_sandbox_proto_rawDesc), len(file_sandbox_v3_session_sandbox_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   16,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

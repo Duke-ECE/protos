@@ -50,6 +50,12 @@ message EditTool {
   string path = 1;
   string old_text = 2;
   string new_text = 3;
+  repeated EditReplacement edits = 4; // applied against one original file snapshot
+}
+
+message EditReplacement {
+  string old_text = 1;
+  string new_text = 2;
 }
 
 message BashTool {
