@@ -95,6 +95,7 @@ message SessionConfig {
   int64 output_limit_tokens = 10;
   repeated ToolDefinition tools = 11;
   google.protobuf.Timestamp created_at = 12;
+  string thinking_mode = 13;  // frozen effective mode; part of config_hash
 }
 
 message ToolDefinition {

@@ -104,8 +104,9 @@ func (x *CreateSessionRequest) GetTools() []string {
 type LlmConfig struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ApiKey        string                 `protobuf:"bytes,1,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
-	BaseUrl       string                 `protobuf:"bytes,2,opt,name=base_url,json=baseUrl,proto3" json:"base_url,omitempty"` // e.g. "https://api.openai.com/v1"
-	Model         string                 `protobuf:"bytes,3,opt,name=model,proto3" json:"model,omitempty"`                    // e.g. "gpt-4o-mini"
+	BaseUrl       string                 `protobuf:"bytes,2,opt,name=base_url,json=baseUrl,proto3" json:"base_url,omitempty"`                // e.g. "https://api.openai.com/v1"
+	Model         string                 `protobuf:"bytes,3,opt,name=model,proto3" json:"model,omitempty"`                                   // e.g. "gpt-4o-mini"
+	ThinkingMode  string                 `protobuf:"bytes,4,opt,name=thinking_mode,json=thinkingMode,proto3" json:"thinking_mode,omitempty"` // off|low|high|max|provider_default; empty = legacy default
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -157,6 +158,13 @@ func (x *LlmConfig) GetBaseUrl() string {
 func (x *LlmConfig) GetModel() string {
 	if x != nil {
 		return x.Model
+	}
+	return ""
+}
+
+func (x *LlmConfig) GetThinkingMode() string {
+	if x != nil {
+		return x.ThinkingMode
 	}
 	return ""
 }
@@ -929,11 +937,12 @@ const file_runtime_v1_agent_proto_rawDesc = "" +
 	"\n" +
 	"session_id\x18\x03 \x01(\tR\tsessionId\x12#\n" +
 	"\rsystem_prompt\x18\x04 \x01(\tR\fsystemPrompt\x12\x14\n" +
-	"\x05tools\x18\x05 \x03(\tR\x05tools\"U\n" +
+	"\x05tools\x18\x05 \x03(\tR\x05tools\"z\n" +
 	"\tLlmConfig\x12\x17\n" +
 	"\aapi_key\x18\x01 \x01(\tR\x06apiKey\x12\x19\n" +
 	"\bbase_url\x18\x02 \x01(\tR\abaseUrl\x12\x14\n" +
-	"\x05model\x18\x03 \x01(\tR\x05model\"6\n" +
+	"\x05model\x18\x03 \x01(\tR\x05model\x12#\n" +
+	"\rthinking_mode\x18\x04 \x01(\tR\fthinkingMode\"6\n" +
 	"\x15CreateSessionResponse\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\"K\n" +

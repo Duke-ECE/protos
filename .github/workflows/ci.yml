@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ github.token }}
       - run: buf lint
       # buf breaking resolves the comparison ref from the local clone, but a
       # pull_request checkout is a detached shallow clone with no local base

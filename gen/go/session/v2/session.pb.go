@@ -435,6 +435,7 @@ type SessionConfig struct {
 	OutputLimitTokens   int64                  `protobuf:"varint,10,opt,name=output_limit_tokens,json=outputLimitTokens,proto3" json:"output_limit_tokens,omitempty"`
 	Tools               []*ToolDefinition      `protobuf:"bytes,11,rep,name=tools,proto3" json:"tools,omitempty"`
 	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	ThinkingMode        string                 `protobuf:"bytes,13,opt,name=thinking_mode,json=thinkingMode,proto3" json:"thinking_mode,omitempty"` // frozen effective mode; part of config_hash
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -551,6 +552,13 @@ func (x *SessionConfig) GetCreatedAt() *timestamppb.Timestamp {
 		return x.CreatedAt
 	}
 	return nil
+}
+
+func (x *SessionConfig) GetThinkingMode() string {
+	if x != nil {
+		return x.ThinkingMode
+	}
+	return ""
 }
 
 type ToolDefinition struct {
@@ -3522,7 +3530,7 @@ const file_session_v2_session_proto_rawDesc = "" +
 	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12;\n" +
 	"\vlast_active\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"lastActive\x125\n" +
-	"\bended_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\"\xe0\x03\n" +
+	"\bended_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\"\x85\x04\n" +
 	"\rSessionConfig\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12%\n" +
@@ -3539,7 +3547,8 @@ const file_session_v2_session_proto_rawDesc = "" +
 	" \x01(\x03R\x11outputLimitTokens\x120\n" +
 	"\x05tools\x18\v \x03(\v2\x1a.session.v2.ToolDefinitionR\x05tools\x129\n" +
 	"\n" +
-	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\x8c\x01\n" +
+	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12#\n" +
+	"\rthinking_mode\x18\r \x01(\tR\fthinkingMode\"\x8c\x01\n" +
 	"\x0eToolDefinition\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12*\n" +
