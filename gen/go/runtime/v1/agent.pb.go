@@ -393,7 +393,8 @@ type ChatRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	Content       string                 `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
-	UserId        string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // ownership enforced when set
+	UserId        string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                   // ownership enforced when set
+	ThinkingMode  string                 `protobuf:"bytes,4,opt,name=thinking_mode,json=thinkingMode,proto3" json:"thinking_mode,omitempty"` // empty = session mode; off = disable for this turn only
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -445,6 +446,13 @@ func (x *ChatRequest) GetContent() string {
 func (x *ChatRequest) GetUserId() string {
 	if x != nil {
 		return x.UserId
+	}
+	return ""
+}
+
+func (x *ChatRequest) GetThinkingMode() string {
+	if x != nil {
+		return x.ThinkingMode
 	}
 	return ""
 }
@@ -954,12 +962,13 @@ const file_runtime_v1_agent_proto_rawDesc = "" +
 	"\x13ListSessionsRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"G\n" +
 	"\x14ListSessionsResponse\x12/\n" +
-	"\bsessions\x18\x01 \x03(\v2\x13.runtime.v1.SessionR\bsessions\"_\n" +
+	"\bsessions\x18\x01 \x03(\v2\x13.runtime.v1.SessionR\bsessions\"\x84\x01\n" +
 	"\vChatRequest\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x18\n" +
 	"\acontent\x18\x02 \x01(\tR\acontent\x12\x17\n" +
-	"\auser_id\x18\x03 \x01(\tR\x06userId\"\x8a\x01\n" +
+	"\auser_id\x18\x03 \x01(\tR\x06userId\x12#\n" +
+	"\rthinking_mode\x18\x04 \x01(\tR\fthinkingMode\"\x8a\x01\n" +
 	"\aSession\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x16\n" +
