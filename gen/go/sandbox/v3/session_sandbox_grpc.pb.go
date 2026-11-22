@@ -19,12 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SessionSandboxService_EnsureSessionSandbox_FullMethodName    = "/sandbox.v3.SessionSandboxService/EnsureSessionSandbox"
-	SessionSandboxService_ExecuteTool_FullMethodName             = "/sandbox.v3.SessionSandboxService/ExecuteTool"
-	SessionSandboxService_PutResource_FullMethodName             = "/sandbox.v3.SessionSandboxService/PutResource"
-	SessionSandboxService_GetResource_FullMethodName             = "/sandbox.v3.SessionSandboxService/GetResource"
-	SessionSandboxService_CloseSessionSandbox_FullMethodName     = "/sandbox.v3.SessionSandboxService/CloseSessionSandbox"
-	SessionSandboxService_GetSessionSandboxStatus_FullMethodName = "/sandbox.v3.SessionSandboxService/GetSessionSandboxStatus"
+	SessionSandboxService_EnsureSessionSandbox_FullMethodName     = "/sandbox.v3.SessionSandboxService/EnsureSessionSandbox"
+	SessionSandboxService_ExecuteTool_FullMethodName              = "/sandbox.v3.SessionSandboxService/ExecuteTool"
+	SessionSandboxService_CheckpointSessionSandbox_FullMethodName = "/sandbox.v3.SessionSandboxService/CheckpointSessionSandbox"
+	SessionSandboxService_PutResource_FullMethodName              = "/sandbox.v3.SessionSandboxService/PutResource"
+	SessionSandboxService_GetResource_FullMethodName              = "/sandbox.v3.SessionSandboxService/GetResource"
+	SessionSandboxService_CloseSessionSandbox_FullMethodName      = "/sandbox.v3.SessionSandboxService/CloseSessionSandbox"
+	SessionSandboxService_GetSessionSandboxStatus_FullMethodName  = "/sandbox.v3.SessionSandboxService/GetSessionSandboxStatus"
 )
 
 // SessionSandboxServiceClient is the client API for SessionSandboxService service.
@@ -36,6 +37,7 @@ const (
 type SessionSandboxServiceClient interface {
 	EnsureSessionSandbox(ctx context.Context, in *EnsureSessionSandboxRequest, opts ...grpc.CallOption) (*EnsureSessionSandboxResponse, error)
 	ExecuteTool(ctx context.Context, in *ExecuteToolRequest, opts ...grpc.CallOption) (*ExecuteToolResponse, error)
+	CheckpointSessionSandbox(ctx context.Context, in *CheckpointSessionSandboxRequest, opts ...grpc.CallOption) (*CheckpointSessionSandboxResponse, error)
 	PutResource(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[PutResourceRequest, PutResourceResponse], error)
 	GetResource(ctx context.Context, in *GetResourceRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetResourceResponse], error)
 	CloseSessionSandbox(ctx context.Context, in *CloseSessionSandboxRequest, opts ...grpc.CallOption) (*CloseSessionSandboxResponse, error)
@@ -64,6 +66,16 @@ func (c *sessionSandboxServiceClient) ExecuteTool(ctx context.Context, in *Execu
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ExecuteToolResponse)
 	err := c.cc.Invoke(ctx, SessionSandboxService_ExecuteTool_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sessionSandboxServiceClient) CheckpointSessionSandbox(ctx context.Context, in *CheckpointSessionSandboxRequest, opts ...grpc.CallOption) (*CheckpointSessionSandboxResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CheckpointSessionSandboxResponse)
+	err := c.cc.Invoke(ctx, SessionSandboxService_CheckpointSessionSandbox_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -131,6 +143,7 @@ func (c *sessionSandboxServiceClient) GetSessionSandboxStatus(ctx context.Contex
 type SessionSandboxServiceServer interface {
 	EnsureSessionSandbox(context.Context, *EnsureSessionSandboxRequest) (*EnsureSessionSandboxResponse, error)
 	ExecuteTool(context.Context, *ExecuteToolRequest) (*ExecuteToolResponse, error)
+	CheckpointSessionSandbox(context.Context, *CheckpointSessionSandboxRequest) (*CheckpointSessionSandboxResponse, error)
 	PutResource(grpc.ClientStreamingServer[PutResourceRequest, PutResourceResponse]) error
 	GetResource(*GetResourceRequest, grpc.ServerStreamingServer[GetResourceResponse]) error
 	CloseSessionSandbox(context.Context, *CloseSessionSandboxRequest) (*CloseSessionSandboxResponse, error)
@@ -150,6 +163,9 @@ func (UnimplementedSessionSandboxServiceServer) EnsureSessionSandbox(context.Con
 }
 func (UnimplementedSessionSandboxServiceServer) ExecuteTool(context.Context, *ExecuteToolRequest) (*ExecuteToolResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ExecuteTool not implemented")
+}
+func (UnimplementedSessionSandboxServiceServer) CheckpointSessionSandbox(context.Context, *CheckpointSessionSandboxRequest) (*CheckpointSessionSandboxResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CheckpointSessionSandbox not implemented")
 }
 func (UnimplementedSessionSandboxServiceServer) PutResource(grpc.ClientStreamingServer[PutResourceRequest, PutResourceResponse]) error {
 	return status.Error(codes.Unimplemented, "method PutResource not implemented")
@@ -216,6 +232,24 @@ func _SessionSandboxService_ExecuteTool_Handler(srv interface{}, ctx context.Con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SessionSandboxServiceServer).ExecuteTool(ctx, req.(*ExecuteToolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SessionSandboxService_CheckpointSessionSandbox_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckpointSessionSandboxRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionSandboxServiceServer).CheckpointSessionSandbox(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SessionSandboxService_CheckpointSessionSandbox_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionSandboxServiceServer).CheckpointSessionSandbox(ctx, req.(*CheckpointSessionSandboxRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -288,6 +322,10 @@ var SessionSandboxService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ExecuteTool",
 			Handler:    _SessionSandboxService_ExecuteTool_Handler,
+		},
+		{
+			MethodName: "CheckpointSessionSandbox",
+			Handler:    _SessionSandboxService_CheckpointSessionSandbox_Handler,
 		},
 		{
 			MethodName: "CloseSessionSandbox",
